@@ -1,0 +1,43 @@
+name: fpl-sync
+
+on:
+  schedule:
+    - cron: '30 3 * * *'   # daily, after FPL's own nightly price/ownership update
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fpl-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Fetch FPL data
+        run: python3 fetch_fpl.py
+
+      - name: Validate JSON
+        run: |
+          python3 -c "
+          import json
+          d = json.load(open('fpl-data.json'))
+          assert d.get('elements') and d.get('teams'), 'empty payload'
+          print('OK:', len(d['elements']), 'players,', len(d['teams']), 'teams')
+          "
+
+      - name: Commit and push
+        run: |
+          git config user.name "tefa-fpl-bot"
+          git config user.email "tefa-fpl-bot@users.noreply.github.com"
+          git add fpl-data.json
+          git commit -m "Update FPL data" || exit 0
+          git push
