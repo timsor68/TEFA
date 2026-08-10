@@ -30,14 +30,18 @@ jobs:
           python3 -c "
           import json
           d = json.load(open('fpl-data.json'))
-          assert d.get('elements') and d.get('teams'), 'empty payload'
-          print('OK:', len(d['elements']), 'players,', len(d['teams']), 'teams')
+          assert d.get('elements') and d.get('teams'), 'empty fpl-data.json payload'
+          print('OK: fpl-data.json —', len(d['elements']), 'players,', len(d['teams']), 'teams')
+
+          h = json.load(open('fpl-history.json'))
+          assert 'players' in h, 'fpl-history.json missing players key'
+          print('OK: fpl-history.json —', len(h['players']), 'players with history')
           "
 
       - name: Commit and push
         run: |
           git config user.name "tefa-fpl-bot"
           git config user.email "tefa-fpl-bot@users.noreply.github.com"
-          git add fpl-data.json
+          git add fpl-data.json fpl-history.json
           git commit -m "Update FPL data" || exit 0
           git push
