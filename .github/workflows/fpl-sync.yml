@@ -44,4 +44,5 @@ jobs:
           git config user.email "tefa-fpl-bot@users.noreply.github.com"
           git add fpl-data.json fpl-history.json
           git commit -m "Update FPL data" || exit 0
+          git pull --rebase origin main
           git push
