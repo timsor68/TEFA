@@ -26,18 +26,20 @@ jobs:
           if "og:image" in html:
               print("OG-taggar finns redan, gör inget.")
           else:
-              og_block = """  <meta property="og:title" content="TEFA — Timos European Football Analyzer">
-  <meta property="og:description" content="Statistik och analys för europeisk fotboll.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://timsor68.github.io/TEFA/">
-  <meta property="og:image" content="https://timsor68.github.io/TEFA/assets/og-image.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="TEFA — Timos European Football Analyzer">
-  <meta name="twitter:description" content="Statistik och analys för europeisk fotboll.">
-  <meta name="twitter:image" content="https://timsor68.github.io/TEFA/assets/og-image.jpg">
-"""
+              og_lines = [
+                  '  <meta property="og:title" content="TEFA — Timos European Football Analyzer">',
+                  '  <meta property="og:description" content="Statistik och analys for europeisk fotboll.">',
+                  '  <meta property="og:type" content="website">',
+                  '  <meta property="og:url" content="https://timsor68.github.io/TEFA/">',
+                  '  <meta property="og:image" content="https://timsor68.github.io/TEFA/assets/og-image.jpg">',
+                  '  <meta property="og:image:width" content="1200">',
+                  '  <meta property="og:image:height" content="630">',
+                  '  <meta name="twitter:card" content="summary_large_image">',
+                  '  <meta name="twitter:title" content="TEFA — Timos European Football Analyzer">',
+                  '  <meta name="twitter:description" content="Statistik och analys for europeisk fotboll.">',
+                  '  <meta name="twitter:image" content="https://timsor68.github.io/TEFA/assets/og-image.jpg">',
+              ]
+              og_block = "\n".join(og_lines) + "\n"
               marker = "<title>TEFA — Timos European Football Analyzer</title>"
               if marker in html:
                   new_html = html.replace(marker, marker + "\n" + og_block, 1)
